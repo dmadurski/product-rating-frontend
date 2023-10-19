@@ -1,0 +1,12 @@
+<mat-toolbar>
+    <span>Product Reviews</span>
+    <span class="spacer"></span>
+    <a *ngIf="showSeeReviewsButton()" routerLink="/reviews" routerLinkActive="active" ariaCurrentWhenActive="page">
+        <button mat-raised-button color="primary">See Reviews</button>
+    </a>
+    <a *ngIf="showAddReviewButton()" routerLink="/newReview" routerLinkActive="active" ariaCurrentWhenActive="page">
+        <button mat-raised-button class="new-button" color="accent">New Review</button>
+    </a>
+</mat-toolbar>
+
+

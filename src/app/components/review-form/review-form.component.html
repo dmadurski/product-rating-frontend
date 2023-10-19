@@ -1,0 +1,95 @@
+<div class="centered-container">
+    <form [formGroup]="form" class="review-form" (ngSubmit)="submitReview($event)">
+        <table cellspacing="0" class="full-width-field">
+            <tr>
+                <th class="table-title">New Review</th>
+            </tr>
+            <p>Product Name</p>
+            <tr>
+                <td>
+                    <mat-form-field>
+                        <mat-select placeholder="Select a Product" formControlName="product" required (valueChange)="setProduct($event)">
+                            <mat-option *ngFor="let productName of products" [value]="productName">
+                              {{productName}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="form.get('product')?.hasError('required')">Please choose a product</mat-error>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <p>Rate this Product</p>
+            <tr>
+                <td>
+                    <div class="score-wrapper">
+                        <div class="stars-wrapper" title="Score: {{ form.get('score')?.value }} out of 5 stars">
+                            <div *ngFor="let i of [1, 2, 3, 4, 5]">
+                                <button mat-raised-button type="button" id="star-button" (click)="setScore(i)">
+                                    <mat-icon class="star-icon" *ngIf="form.get('score')?.value>= i">star</mat-icon>
+                                    <mat-icon class="star-icon" *ngIf="form.get('score')?.value < i">star_border</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="score-error-wrapper">
+                            <mat-error *ngIf="formSubmitted && form.get('score')?.hasError('pattern')">
+                                Score must be between 1 and 5
+                            </mat-error>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            
+            <p>Leave a Comment (Optional)</p>
+            <tr>
+                <td>
+                    <mat-form-field>
+                        <textarea matInput autocomplete="off" placeholder="Comment" style="height: 8rem;" 
+                            formControlName="comment" [value]="form.get('comment')?.value" (input)="setComment($any($event.target).value)">
+                        </textarea>
+                        <mat-error *ngIf="form.get('comment')?.hasError('pattern')">Comment must be less than 500 characters</mat-error>
+                    </mat-form-field>
+                    <div id="end-hint">
+                        {{characterCount}}/500
+                    </div>
+                </td>
+            </tr>
+            <p>First Name</p>
+            <tr>
+                <td>
+                    <mat-form-field>
+                        <input matInput type="text" placeholder="First name" formControlName="firstName" 
+                            [value]="form.get('firstName')?.value" (input)="setFirstName($any($event.target).value)" />
+                        <mat-error *ngIf="form.get('firstName')?.hasError('required')">Name must be included</mat-error>
+                        <mat-error *ngIf="form.get('firstName')?.hasError('pattern')">Name may only include alphanumeric characters & cannot start with a number</mat-error>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <p>Last Name</p>
+            <tr>
+                <td>
+                    <mat-form-field>
+                        <input matInput placeholder="Last name" formControlName="lastName" 
+                            [value]="form.get('lastName')?.value" (input)="setLastName($any($event.target).value)" />
+                        <mat-error *ngIf="form.get('lastName')?.hasError('required')">Name must be included</mat-error>
+                        <mat-error *ngIf="form.get('lastName')?.hasError('pattern')">Name may only include alphanumeric characters & cannot start with a number</mat-error>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <p>Zipcode</p>
+            <tr>
+                <td>
+                    <mat-form-field id="zipcode">
+                        <input matInput placeholder="Zipcode" formControlName="zipcode" 
+                            [value]="form.get('zipcode')?.value" (input)="setZipcode($any($event.target).value)" />
+                        <mat-error *ngIf="form.get('zipcode')?.hasError('required')">Zipcode must be included</mat-error>
+                        <mat-error *ngIf="form.get('zipcode')?.hasError('pattern')">Zipcode must be of 5 or 9 digits</mat-error>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button mat-raised-button class="new-review-button" color="accent" type="submit">Add Review</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

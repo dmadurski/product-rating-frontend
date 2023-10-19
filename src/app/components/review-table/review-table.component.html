@@ -1,0 +1,41 @@
+<div class="table-container mat-elevation-z5">
+    <mat-table #table [dataSource]="dataSource" matSort>
+        <!-- Define the columns -->
+        <ng-container matColumnDef="product">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Product </mat-header-cell>
+          <mat-cell *matCellDef="let review"> {{ review.product }} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="score">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Score </mat-header-cell>
+          <mat-cell *matCellDef="let review"> {{ review.score }} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="comment">
+          <mat-header-cell *matHeaderCellDef> Comment </mat-header-cell>
+          <mat-cell *matCellDef="let review"> {{ review.comment }} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="firstName">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> First Name </mat-header-cell>
+          <mat-cell *matCellDef="let review"> {{ review.firstName }} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="lastName">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </mat-header-cell>
+          <mat-cell *matCellDef="let review"> {{ review.lastName }} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="zipcode">
+          <mat-header-cell *matHeaderCellDef> Zipcode </mat-header-cell>
+          <mat-cell *matCellDef="let review"> {{ review.zipcode }} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="dateAndTime">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Date </mat-header-cell>
+          <mat-cell *matCellDef="let review"> {{ review.dateAndTime | date:'MM-dd-yyyy hh:mm a' }} </mat-cell>
+        </ng-container>
+        
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 20]"
+                 [showFirstLastButtons]="true">
+    </mat-paginator>
+  </div>

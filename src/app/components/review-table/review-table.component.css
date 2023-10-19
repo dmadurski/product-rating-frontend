@@ -1,0 +1,25 @@
+.table-container {
+    display: flex;
+    flex-direction: column;
+    margin: 3rem 6rem 0;
+    min-width: 25rem;
+  }
+  
+  .mat-table {
+    overflow: auto;
+  }
+
+  .mat-column-product {
+    flex: 0 0 14%;
+    width: 14%;
+  }
+
+  .mat-column-score {
+    flex: 0 0 8%;
+    width: 8%;
+  }
+
+  .mat-column-zipcode {
+    flex: 0 0 10%;
+    width: 10%;
+  }
