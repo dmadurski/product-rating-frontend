@@ -22,11 +22,15 @@ export class ReviewTableComponent implements OnInit {
     this.dataSource = new MatTableDataSource<Review>();
   }
   
-  ngOnInit(){
-    this.reviewService.findAll().subscribe((reviews) => {
+  async ngOnInit(){
+    try {
+      const reviews = await this.reviewService.findAll();
       this.dataSource.data = reviews;
-      console.log(this.dataSource.data);
-    });
+      console.log('Reviews:', reviews);
+    } catch (error) {
+      console.error('Error:', error);
+      //Display error message to user
+    }
   }
 
   ngAfterViewInit() {

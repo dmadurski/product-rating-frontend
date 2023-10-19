@@ -64,7 +64,7 @@ export class ReviewFormComponent implements OnInit {
     this.form.get('zipcode')!.setValue(zipcode);
   }
 
-  submitReview(event: Event){
+  async submitReview(event: Event){
     event.preventDefault();
 
     this.formSubmitted = true;
@@ -80,17 +80,13 @@ export class ReviewFormComponent implements OnInit {
 
       const review = new Review(null, firstName, lastName, zipcode, product, score, comment, null);
 
-      //Make a call to the backend using the created review, and if the status isn't a 200 OK, log the error
-      this.reviewService.newReview(review).subscribe({
-        next: (response) => {
-          console.log('Response from server:', response);
-          this.router.navigate(["/reviews"]);
-        },
-        error: (error) => {
-          console.error('Error:', error);
-          //create a placeholder component and display error message within it
-        },
-      });
+      try {
+        const response = await this.reviewService.newReview(review);
+        this.router.navigate(['/reviews']);
+      } catch (error) {
+        console.log('Error:', error);
+        //create a placeholder component and display error message within it
+      }
     }
   }
 }

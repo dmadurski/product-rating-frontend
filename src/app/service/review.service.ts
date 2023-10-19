@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, firstValueFrom, lastValueFrom, map } from 'rxjs';
 import { Review } from '../model/review';
 
 @Injectable({
@@ -21,13 +21,24 @@ export class ReviewService {
 
   //explore pagination within spring boot instead of angular
 
-  public findAll(): Observable<Review[]> {
-    //wait for this to finish, turn this into a synchronous call
-    const reviews: Observable<Review[]> = this.http.get<Review[]>(this.allReviewsUrl);
-    return reviews;
+  public async findAll(): Promise<Review[]> {
+    try {
+      const reviews = await firstValueFrom(this.http.get<Review[]>(this.allReviewsUrl));
+      return reviews;
+    } catch (error) {
+      console.log('Error:', error);
+      throw error; // Rethrow the error
+    }
   }
 
-  public newReview(review: Review): Observable<HttpResponse<Object>> {
-    return this.http.post<HttpResponse<Object>>(this.newReviewUrl, review);
+  public async newReview(review: Review): Promise<HttpResponse<Object>> {
+    try {
+      const response = await lastValueFrom(this.http.post<HttpResponse<Object>>(this.newReviewUrl, review));
+      return response;
+    
+    } catch (error) {
+      console.log('Error:', error);
+      throw error;
+    }
   }
 }
