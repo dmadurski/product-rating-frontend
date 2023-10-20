@@ -14,6 +14,14 @@ export class ReviewFormComponent implements OnInit {
   form: FormGroup;
   characterCount: number = 0;
   formSubmitted: boolean = false;
+  shouldShowError: boolean = false;
+  errorMessage?: string;
+  products = [
+    'iConnectX',
+    'EmployMe',
+    'WeInvite',
+    'CompanyTRAK',
+  ];
 
   constructor(private router: Router, private reviewService: ReviewService, private fb: FormBuilder) {
     this.form = this.fb.group({
@@ -30,13 +38,6 @@ export class ReviewFormComponent implements OnInit {
     console.log('ReviewFormComponent has been rendered.');
     // You can add any other initialization or rendering-related logic here.
   }
-
-  products = [
-    'iConnectX',
-    'EmployMe',
-    'WeInvite',
-    'CompanyTRAK',
-  ];
 
   //Data binding methods
   setProduct(product: string) {
@@ -84,8 +85,9 @@ export class ReviewFormComponent implements OnInit {
         const response = await this.reviewService.newReview(review);
         this.router.navigate(['/reviews']);
       } catch (error) {
-        console.log('Error:', error);
-        //create a placeholder component and display error message within it
+        console.error('Error:', error);
+        this.shouldShowError = true;
+        this.errorMessage = 'An error occurred while loading reviews. Please try again later.';
       }
     }
   }

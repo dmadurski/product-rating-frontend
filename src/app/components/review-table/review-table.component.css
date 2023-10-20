@@ -1,25 +1,58 @@
-.table-container {
+.review-container {
     display: flex;
     flex-direction: column;
-    margin: 3rem 6rem 0;
+    margin: 2rem 0 0;
     min-width: 25rem;
-  }
-  
-  .mat-table {
-    overflow: auto;
-  }
+}
 
-  .mat-column-product {
-    flex: 0 0 14%;
-    width: 14%;
-  }
+@media (min-width: 1200px) {
+  .table-container {
+    margin: 3rem 6rem 0;
+  } 
+}
 
-  .mat-column-score {
-    flex: 0 0 8%;
-    width: 8%;
-  }
+.mat-table {
+  overflow: auto;
+}
 
-  .mat-column-zipcode {
-    flex: 0 0 10%;
-    width: 10%;
-  }
+.mat-column-product {
+  flex: 0 0 14%;
+  width: 14%;
+}
+
+.mat-column-score {
+  flex: 0 0 8%;
+  width: 8%;
+}
+
+.mat-column-zipcode {
+  flex: 0 0 10%;
+  width: 10%;
+}
+
+#review-card {
+  margin: 0 1rem 1rem;
+  font-size: 1.1rem;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.date-span {
+  margin-left: 0;
+}
+
+.score-span {
+  margin-left: 4rem;
+}
+
+.table-review-container {
+  margin: 0 3.5rem;
+}
+
+.card-review-container {
+  margin-bottom: 2rem;
+}
+

@@ -23,9 +23,9 @@
                     <div class="score-wrapper">
                         <div class="stars-wrapper" title="Score: {{ form.get('score')?.value }} out of 5 stars">
                             <div *ngFor="let i of [1, 2, 3, 4, 5]">
-                                <button mat-raised-button type="button" id="star-button" (click)="setScore(i)">
-                                    <mat-icon class="star-icon" *ngIf="form.get('score')?.value>= i">star</mat-icon>
-                                    <mat-icon class="star-icon" *ngIf="form.get('score')?.value < i">star_border</mat-icon>
+                                <button mat-icon-button type="button" id="star-button" (click)="setScore(i)">
+                                    <mat-icon id="star-icon" *ngIf="form.get('score')?.value>= i">star</mat-icon>
+                                    <mat-icon id="star-icon" *ngIf="form.get('score')?.value < i">star_border</mat-icon>
                                 </button>
                             </div>
                         </div>
@@ -92,4 +92,7 @@
             </tr>
         </table>
     </form>
+    <div *ngIf="shouldShowError" class="alert alert-warning" role="alert">
+        {{errorMessage}}
+    </div>
 </div>

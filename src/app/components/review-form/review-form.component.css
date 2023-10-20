@@ -14,36 +14,47 @@
     width: 100%;
  }
 
- p {
-   margin-top: .5rem;
-   margin-bottom: .2rem;
- }
+p {
+margin-top: .5rem;
+margin-bottom: .2rem;
+}
 
- mat-form-field {
-    width: 100%;
- }
+mat-form-field {
+   width: 100%;
+}
 
- #zipcode {
-    width:15rem;
- }
+#zipcode {
+   width:15rem;
+}
 
- .table-title {
-    height:2rem;
-    font-size: 2rem;
-    padding-bottom: 1rem;
- }
+.table-title {
+   height:2rem;
+   font-size: 2rem;
+   padding-bottom: 1rem;
+}
 
- .stars-wrapper {
+.stars-wrapper {
    display: flex;
    justify-content: flex-start;
 }
 
 #star-button {
-   padding: 0;
-   margin: 0 8px 0 2px;
+   margin-right: .7rem;
+   display: inline-flex;
+   justify-content: center;
+   align-items: center;
+   border-radius: 50%; /* Make it round */
+   background-color: rgba(0, 0, 0, 0.12); /* Background color, adjust as needed */
+   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Box shadow for the raised effect */
+   transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-.star-icon {
+#star-button:hover {
+   background-color: rgba(0, 0, 0, 0.2); /* Background color on hover, adjust as needed */
+   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2); /* Box shadow on hover, adjust as needed */
+}
+
+#star-icon {
    margin: 0; 
    font-size: 1.5rem; 
    width: 1.5rem; 
@@ -70,4 +81,18 @@ textarea {
 
 .new-review-button {
    margin: .5rem 0 5rem;
+}
+
+@media (max-width: 575.98px) {
+   .review-form {
+      width: 20rem;
+   }
+    
+   #end-hint {
+      font-size: .75rem;
+      margin-left: 17.5rem;
+      transform: translateY(-1.1rem);
+      position: absolute
+   }
+
 }

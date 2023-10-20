@@ -17,8 +17,6 @@ export class ReviewService {
     this.newReviewUrl = 'http://localhost:8080/newReview';
   }
 
-  //make pages responsive, viewable on mobile
-
   //explore pagination within spring boot instead of angular
 
   public async findAll(): Promise<Review[]> {
@@ -27,15 +25,18 @@ export class ReviewService {
       return reviews;
     } catch (error) {
       console.log('Error:', error);
-      throw error; // Rethrow the error
+      throw error;
     }
   }
 
   public async newReview(review: Review): Promise<HttpResponse<Object>> {
     try {
-      const response = await lastValueFrom(this.http.post<HttpResponse<Object>>(this.newReviewUrl, review));
-      return response;
-    
+      const response = await firstValueFrom(this.http.post<HttpResponse<Object>>(this.newReviewUrl, review, {observe:'response'}));
+      if (response.status === 200) {
+        return response;
+      } else {
+        throw new Error(`HTTP status: ${response.status}, Error: ${response.body}`);
+      }
     } catch (error) {
       console.log('Error:', error);
       throw error;
