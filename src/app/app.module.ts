@@ -13,12 +13,14 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TextareaAutoresizeDirective } from './directives/textarea-autoresize.directive';
 import { NavComponent } from './components/nav/nav.component';
 import { ReviewTableComponent } from './components/review-table/review-table.component';
 import { ReviewFormComponent } from './components/review-form/review-form.component';
-import { HttpClientModule } from '@angular/common/http';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { TextareaAutoresizeDirective } from './directives/textarea-autoresize.directive';
+import { RegisterFormComponent } from './components/register-form/register-form.component';
+import { LoginFormComponent } from './components/login-form/login-form.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { TextareaAutoresizeDirective } from './directives/textarea-autoresize.di
     ReviewTableComponent,
     ReviewFormComponent,
     TextareaAutoresizeDirective,
+    RegisterFormComponent,
+    LoginFormComponent,
   ],
   imports: [
     BrowserModule,

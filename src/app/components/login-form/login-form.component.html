@@ -1,0 +1,37 @@
+<div class="centered-container">
+    <form [formGroup]="form" class="register-form" (ngSubmit)="login($event)">
+        <table cellspacing="0" class="full-width-field">
+            <tr>
+                <th class="table-title">Login</th>
+            </tr>
+            <p class="user-name-label">User Name</p>
+            <tr>
+                <td>
+                    <mat-form-field>
+                        <input matInput placeholder="User Name" formControlName="userName" 
+                            [value]="form.get('userName')?.value" (input)="setUserName($any($event.target).value)" />
+                        <mat-error *ngIf="form.get('userName')?.hasError('required')">User name must be included</mat-error>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <p>Password</p>
+            <tr>
+                <td>
+                    <mat-form-field>
+                        <input matInput type="password" placeholder="Password" formControlName="password" 
+                            [value]="form.get('password')?.value" (input)="setPassword($any($event.target).value)" />
+                        <mat-error *ngIf="form.get('password')?.hasError('required')">Password must be included</mat-error>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button mat-raised-button class="login-button" color="accent" type="submit">Login</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <div *ngIf="shouldShowError" class="alert alert-warning error-message" role="alert">
+        {{errorMessage}}
+    </div>
+</div>

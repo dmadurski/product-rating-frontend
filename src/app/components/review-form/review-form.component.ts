@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Review } from 'src/app/model/review';
 import { ReviewService } from 'src/app/service/review.service';
@@ -9,7 +9,7 @@ import { ReviewService } from 'src/app/service/review.service';
   templateUrl: './review-form.component.html',
   styleUrls: ['./review-form.component.css']
 })
-export class ReviewFormComponent implements OnInit {
+export class ReviewFormComponent {
 
   form: FormGroup;
   characterCount: number = 0;
@@ -32,11 +32,6 @@ export class ReviewFormComponent implements OnInit {
       lastName: new FormControl('', [Validators.required, Validators.pattern(/^(?![0-9])[A-Za-z0-9]*$/)]),
       zipcode: new FormControl('', [Validators.required, Validators.pattern(/^(?:\d{5}|\d{9})$/)]),
     });
-  }
-
-  ngOnInit() {
-    console.log('ReviewFormComponent has been rendered.');
-    // You can add any other initialization or rendering-related logic here.
   }
 
   //Data binding methods
@@ -79,7 +74,7 @@ export class ReviewFormComponent implements OnInit {
       const comment = this.form.get('comment')?.value;
       const zipcode = this.form.get('zipcode')?.value;
 
-      const review = new Review(null, firstName, lastName, zipcode, product, score, comment, null);
+      const review = new Review(null, null, firstName, lastName, zipcode, product, score, comment, null);
 
       try {
         const response = await this.reviewService.newReview(review);

@@ -1,0 +1,70 @@
+<div class="centered-container">
+    <form [formGroup]="form" class="register-form" (ngSubmit)="registerUser($event)">
+        <table cellspacing="0" class="full-width-field">
+            <tr>
+                <th class="table-title">Register a new account</th>
+            </tr>
+            <p class="first-name-label">First Name</p>
+            <tr>
+                <td>
+                    <mat-form-field>
+                        <input matInput type="text" placeholder="First name" formControlName="firstName" 
+                            [value]="form.get('firstName')?.value" (input)="setFirstName($any($event.target).value)" />
+                        <mat-error *ngIf="form.get('firstName')?.hasError('required')">Name must be included</mat-error>
+                        <mat-error *ngIf="form.get('firstName')?.hasError('pattern')">Name may only include alphanumeric characters & cannot start with a number</mat-error>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <p>Last Name</p>
+            <tr>
+                <td>
+                    <mat-form-field>
+                        <input matInput placeholder="Last name" formControlName="lastName" 
+                            [value]="form.get('lastName')?.value" (input)="setLastName($any($event.target).value)" />
+                        <mat-error *ngIf="form.get('lastName')?.hasError('required')">Name must be included</mat-error>
+                        <mat-error *ngIf="form.get('lastName')?.hasError('pattern')">Name may only include alphanumeric characters & cannot start with a number</mat-error>
+                    </mat-form-field>
+                </td>
+            </tr>
+            <p>User Name</p>
+            <tr>
+                <td>
+                    <mat-form-field>
+                        <input matInput placeholder="User Name" formControlName="userName" 
+                            [value]="form.get('userName')?.value" (input)="setUserName($any($event.target).value)" />
+                        <mat-error *ngIf="form.get('userName')?.hasError('required')">User name must be included</mat-error>
+                        <mat-error *ngIf="form.get('userName')?.hasError('pattern')">Make sure username matches all requirements</mat-error>
+                    </mat-form-field>
+                    <ul title="Username requirements:">
+                        <li>Username must be between 3 and 20 characters</li>
+                        <li>Username may contain only alphanumeric characters or the following separators: '<b>.</b>', '<b>_</b>', or '<b>-</b>'</li>
+                        <li>Username cannot start with, end with, or have two consecutive special characters</li>
+                    </ul>
+                </td>
+            </tr>
+            <p>Password</p>
+            <tr>
+                <td>
+                    <mat-form-field>
+                        <input matInput type="password" placeholder="Password" formControlName="password" 
+                            [value]="form.get('password')?.value" (input)="setPassword($any($event.target).value)" />
+                        <mat-error *ngIf="form.get('password')?.hasError('required')">Password must be included</mat-error>
+                        <mat-error *ngIf="form.get('password')?.hasError('pattern')">Make sure password matches all requirements</mat-error>
+                    </mat-form-field>
+                    <ul title="Password requirements:">
+                        <li>Password must be at least 10 characters</li>
+                        <li>Password must require at least 1 number and 1 capitol letter</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button mat-raised-button class="new-user-button" color="accent" type="submit">Create Account</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <div *ngIf="shouldShowError" class="alert alert-warning error-message" role="alert">
+        {{errorMessage}}
+    </div>
+</div>

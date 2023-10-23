@@ -1,11 +1,15 @@
 <mat-toolbar>
     <span>Product Reviews</span>
     <span class="spacer"></span>
+
     <a *ngIf="showSeeReviewsButton()" routerLink="/reviews" routerLinkActive="active" ariaCurrentWhenActive="page">
         <button mat-raised-button color="primary">See Reviews</button>
     </a>
-    <a *ngIf="showAddReviewButton()" routerLink="/newReview" routerLinkActive="active" ariaCurrentWhenActive="page">
+    <a *ngIf="showSeeAddReviewButton()" routerLink="/newReview" routerLinkActive="active" ariaCurrentWhenActive="page">
         <button mat-raised-button class="new-button" color="accent">New Review</button>
+    </a>
+    <a *ngIf="showSeeRegisterButton()" routerLink="/register" routerLinkActive="active" ariaCurrentWhenActive="page">
+        <button mat-raised-button class="register-button">Register</button>
     </a>
 </mat-toolbar>
 

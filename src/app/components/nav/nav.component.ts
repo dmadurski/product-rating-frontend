@@ -10,14 +10,18 @@ export class NavComponent {
 
   constructor(private router: Router) {}
 
+  showSeeRegisterButton(): boolean {
+    const options: IsActiveMatchOptions = {paths: 'exact', queryParams: 'exact', fragment: 'ignored', matrixParams: 'ignored'};
+    return !this.router.isActive('/register', options);
+  }
+
   showSeeReviewsButton(): boolean {
     const options: IsActiveMatchOptions = {paths: 'exact', queryParams: 'exact', fragment: 'ignored', matrixParams: 'ignored'};
     return !this.router.isActive('/reviews', options);
   }
 
-  showAddReviewButton(): boolean {
+  showSeeAddReviewButton(): boolean {
       const options: IsActiveMatchOptions = {paths: 'exact', queryParams: 'exact', fragment: 'ignored', matrixParams: 'ignored'};
       return !this.router.isActive('/newReview', options);
   }
-
 }

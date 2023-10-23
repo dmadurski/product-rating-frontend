@@ -1,0 +1,39 @@
+.centered-container {
+    margin-top: 1.3rem;
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    justify-content: center;
+    align-items: center;
+}
+
+.register-form {
+    width: 30rem;
+}
+
+.full-width-field {
+    width: 100%;
+ }
+
+.table-title {
+    height:1.5rem;
+    font-size: 1.5rem;
+    padding-bottom: 1rem;
+    text-align: center;
+}
+
+mat-form-field {
+   width: 100%;
+}
+
+.user-name-label {
+    margin-top: .5rem;
+}
+
+p {
+    margin-top: .5rem;
+    margin-bottom: .2rem;
+}
+
+.error-message {
+    margin-top: 1rem;
+}

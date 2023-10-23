@@ -15,8 +15,8 @@
  }
 
 p {
-margin-top: .5rem;
-margin-bottom: .2rem;
+   margin-top: .5rem;
+   margin-bottom: .2rem;
 }
 
 mat-form-field {
@@ -28,9 +28,10 @@ mat-form-field {
 }
 
 .table-title {
-   height:2rem;
-   font-size: 2rem;
+   height:1.5rem;
+   font-size: 1.5rem;
    padding-bottom: 1rem;
+   text-align: center;
 }
 
 .stars-wrapper {
