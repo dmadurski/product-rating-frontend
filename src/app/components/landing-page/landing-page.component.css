@@ -1,0 +1,16 @@
+.button-container {
+    margin-top: 1.3rem;
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    justify-content: center;
+    align-items: center;
+}
+
+.home-button {
+    width: 12rem;
+    height: 3.5rem;
+}
+
+.button-link {
+    margin-top: 4rem;
+}

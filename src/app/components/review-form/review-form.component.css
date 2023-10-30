@@ -97,3 +97,17 @@ textarea {
    }
 
 }
+
+.mat-form-field.readonly {
+   pointer-events: none; /* Disable hover and focus interactions */
+   background-color: transparent; /* Set the background to transparent */
+   border: none; /* Remove border */
+   box-shadow: none; /* Remove box-shadow */
+   color: inherit; /* Use the default text color */
+   cursor: default;
+ }
+
+ mat-dialog-actions{
+   display: flex;
+   justify-content: end;
+}

@@ -1,4 +1,7 @@
 <div class="centered-container">
+    <div *ngIf="shouldShowError" class="alert alert-warning error-message" role="alert">
+        {{errorMessage}}
+    </div>
     <form [formGroup]="form" class="register-form" (ngSubmit)="login($event)">
         <table cellspacing="0" class="full-width-field">
             <tr>
@@ -31,7 +34,4 @@
             </tr>
         </table>
     </form>
-    <div *ngIf="shouldShowError" class="alert alert-warning error-message" role="alert">
-        {{errorMessage}}
-    </div>
 </div>

@@ -3,5 +3,17 @@
   }
 
 .new-button {
-    margin-left: 1.5rem;
+    margin-left: 1rem;
+}
+
+.register-button {
+  margin-left: 1rem;
+}
+
+.login-button {
+  margin-left: 1rem;
+}
+
+.logout-button {
+  margin-left: 1rem;
 }

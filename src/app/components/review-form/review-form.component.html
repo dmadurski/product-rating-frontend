@@ -55,9 +55,9 @@
             <p>First Name</p>
             <tr>
                 <td>
-                    <mat-form-field>
-                        <input matInput type="text" placeholder="First name" formControlName="firstName" 
-                            [value]="form.get('firstName')?.value" (input)="setFirstName($any($event.target).value)" />
+                    <mat-form-field [class.readonly]="!isEditable">
+                        <input matInput type="text" placeholder="First name" formControlName="firstName"
+                            [value]="form.get('firstName')?.value" (input)="setFirstName($any($event.target).value)" [readonly]="!isEditable" />
                         <mat-error *ngIf="form.get('firstName')?.hasError('required')">Name must be included</mat-error>
                         <mat-error *ngIf="form.get('firstName')?.hasError('pattern')">Name may only include alphanumeric characters & cannot start with a number</mat-error>
                     </mat-form-field>
@@ -66,9 +66,9 @@
             <p>Last Name</p>
             <tr>
                 <td>
-                    <mat-form-field>
-                        <input matInput placeholder="Last name" formControlName="lastName" 
-                            [value]="form.get('lastName')?.value" (input)="setLastName($any($event.target).value)" />
+                    <mat-form-field [class.readonly]="!isEditable">
+                        <input matInput type="text" tabindex="-1" placeholder="Last name" formControlName="lastName" 
+                            [value]="form.get('lastName')?.value" (input)="setLastName($any($event.target).value)" [readonly]="!isEditable" />
                         <mat-error *ngIf="form.get('lastName')?.hasError('required')">Name must be included</mat-error>
                         <mat-error *ngIf="form.get('lastName')?.hasError('pattern')">Name may only include alphanumeric characters & cannot start with a number</mat-error>
                     </mat-form-field>
@@ -78,7 +78,7 @@
             <tr>
                 <td>
                     <mat-form-field id="zipcode">
-                        <input matInput placeholder="Zipcode" formControlName="zipcode" 
+                        <input matInput placeholder="Zipcode" formControlName="zipcode"
                             [value]="form.get('zipcode')?.value" (input)="setZipcode($any($event.target).value)" />
                         <mat-error *ngIf="form.get('zipcode')?.hasError('required')">Zipcode must be included</mat-error>
                         <mat-error *ngIf="form.get('zipcode')?.hasError('pattern')">Zipcode must be of 5 or 9 digits</mat-error>

@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { firstValueFrom, take } from 'rxjs';
 import { Review } from 'src/app/model/review';
-import { ReviewService } from 'src/app/service/review.service';
+import { ReviewService } from 'src/app/services/review.service';
+import { AppState } from 'src/app/store/app-state';
+import * as selectors from 'src/app/store/store.selectors';
 
 @Component({
   selector: 'app-review-form',
@@ -11,7 +15,8 @@ import { ReviewService } from 'src/app/service/review.service';
 })
 export class ReviewFormComponent {
 
-  form: FormGroup;
+  form!: FormGroup;
+  isEditable: boolean = true;
   characterCount: number = 0;
   formSubmitted: boolean = false;
   shouldShowError: boolean = false;
@@ -22,16 +27,35 @@ export class ReviewFormComponent {
     'WeInvite',
     'CompanyTRAK',
   ];
+  userFirstName?: string;
+  userLastName?: string;
 
-  constructor(private router: Router, private reviewService: ReviewService, private fb: FormBuilder) {
-    this.form = this.fb.group({
+  constructor(private router: Router, private reviewService: ReviewService, private fb: FormBuilder, private store: Store<AppState>) {
+    this.initializeForm();
+  }
+
+  async initializeForm() {
+    await this.loadStoreData();
+    this.isEditable = false;
+
+    this.form = this.fb.group({ 
       product: new FormControl('', Validators.required),
       score: new FormControl(0, [Validators.required, Validators.pattern(/^[1-5]*$/)]),
       comment: new FormControl('', Validators.pattern(/^.{1,500}$/)),
-      firstName: new FormControl('', [Validators.required, Validators.pattern(/^(?![0-9])[A-Za-z0-9]*$/)]),
-      lastName: new FormControl('', [Validators.required, Validators.pattern(/^(?![0-9])[A-Za-z0-9]*$/)]),
+      firstName: new FormControl(this.userFirstName, [Validators.required, Validators.pattern(/^(?![0-9])[A-Za-z0-9]*$/)]),
+      lastName: new FormControl(this.userLastName, [Validators.required, Validators.pattern(/^(?![0-9])[A-Za-z0-9]*$/)]),
       zipcode: new FormControl('', [Validators.required, Validators.pattern(/^(?:\d{5}|\d{9})$/)]),
     });
+  }
+
+  //Fetch stored data, and use it to populate name fields
+  async loadStoreData() {
+    try {
+      this.userFirstName = await firstValueFrom(this.store.select(selectors.selectFirstName).pipe(take(1)));
+      this.userLastName = await firstValueFrom(this.store.select(selectors.selectLastName).pipe(take(1)));
+    } catch (error) {
+      console.error('Error fetching stored data:', error);
+    }
   }
 
   //Data binding methods
@@ -74,7 +98,9 @@ export class ReviewFormComponent {
       const comment = this.form.get('comment')?.value;
       const zipcode = this.form.get('zipcode')?.value;
 
-      const review = new Review(null, null, firstName, lastName, zipcode, product, score, comment, null);
+      const userId = await firstValueFrom(this.store.select(selectors.selectUserId).pipe(take(1)));
+
+      const review = new Review(null, userId, firstName, lastName, zipcode, product, score, comment, null);
 
       try {
         const response = await this.reviewService.newReview(review);

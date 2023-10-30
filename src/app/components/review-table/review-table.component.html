@@ -30,6 +30,14 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header> Date </mat-header-cell>
         <mat-cell *matCellDef="let review"> {{ review.dateAndTime | date:'MM-dd-yyyy hh:mm a' }} </mat-cell>
       </ng-container>
+      <ng-container matColumnDef="delete" *ngIf="isAdmin">
+        <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
+        <mat-cell *matCellDef="let review">
+          <button mat-icon-button color="warn" (click)="deleteReview(review.ratingId)">
+            <mat-icon aria-label="Delete icon">delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
       
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
@@ -42,12 +50,12 @@
   </div>
 
   <div class="d-block d-lg-none card-review-container">
-    <div *ngFor="let review of pagedReviews" class="card bg-primary mat-elevation-z5" id="review-card">
-      <div class="card-header text-white header-content">
+    <div *ngFor="let review of pagedReviews" class="card mat-elevation-z5" id="review-card">
+      <div class="card-header text-white header-content bg-primary">
         <span class="name-span"><b>{{review.firstName}} {{review.lastName}}</b></span>
         <span class="date-span">{{review.dateAndTime | date:'MM-dd-yyyy h:mm a'}}</span>
       </div>
-      <ul class="list-group list-group-flush">
+      <ul class="list-group">
         <li class="list-group-item">
           <span class="product-span"><b>Product:</b> {{review.product}}</span>
           <span class="score-span"><b>Score:</b> {{review.score}}/5</span>
@@ -55,6 +63,11 @@
         <li *ngIf="review.comment" class="list-group-item"><b>Comment:</b> {{review.comment}} </li>
         <li class="list-group-item">
           <span class="zipcode-span"><b>Zip:</b> {{review.zipcode}}</span>
+        </li>
+        <li class="list-group-item delete-row">
+          <button mat-raised-button color="warn" (click)="deleteReview(review.ratingId)">
+            Delete review
+          </button>
         </li>
       </ul>
     </div>

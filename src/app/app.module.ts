@@ -10,6 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,6 +22,11 @@ import { ReviewTableComponent } from './components/review-table/review-table.com
 import { ReviewFormComponent } from './components/review-form/review-form.component';
 import { RegisterFormComponent } from './components/register-form/register-form.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
+import { LandingPageComponent } from './components/landing-page/landing-page.component';
+import { StoreModule } from '@ngrx/store';
+import { reducers } from './store/index';
+import { ConfimationDialogComponent } from './components/confimation-dialog/confimation-dialog.component';
+import { ConfirmationDialogService } from './services/confirmation-dialog.service';
 
 @NgModule({
   declarations: [
@@ -31,6 +37,8 @@ import { LoginFormComponent } from './components/login-form/login-form.component
     TextareaAutoresizeDirective,
     RegisterFormComponent,
     LoginFormComponent,
+    LandingPageComponent,
+    ConfimationDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,9 +54,11 @@ import { LoginFormComponent } from './components/login-form/login-form.component
     MatSelectModule,
     MatFormFieldModule,
     ReactiveFormsModule,
-    MatIconModule
+    MatIconModule,
+    MatDialogModule,
+    StoreModule.forRoot(reducers)
   ],
-  providers: [],
+  providers: [ConfirmationDialogService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

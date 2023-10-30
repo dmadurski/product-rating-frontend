@@ -2,14 +2,20 @@
     <span>Product Reviews</span>
     <span class="spacer"></span>
 
-    <a *ngIf="showSeeReviewsButton()" routerLink="/reviews" routerLinkActive="active" ariaCurrentWhenActive="page">
+    <a *ngIf="shouldShowReviewsButton() && (userLoggedIn | async)" routerLink="/reviews" routerLinkActive="active" ariaCurrentWhenActive="page">
         <button mat-raised-button color="primary">See Reviews</button>
     </a>
-    <a *ngIf="showSeeAddReviewButton()" routerLink="/newReview" routerLinkActive="active" ariaCurrentWhenActive="page">
+    <a *ngIf="shouldShowAddReviewButton() && (userLoggedIn | async) && (isNotAdmin | async)" routerLink="/newReview" routerLinkActive="active" ariaCurrentWhenActive="page">
         <button mat-raised-button class="new-button" color="accent">New Review</button>
     </a>
-    <a *ngIf="showSeeRegisterButton()" routerLink="/register" routerLinkActive="active" ariaCurrentWhenActive="page">
+    <a *ngIf="shouldShowRegisterButton() && !(userLoggedIn | async)" routerLink="/register" routerLinkActive="active" ariaCurrentWhenActive="page">
         <button mat-raised-button class="register-button">Register</button>
+    </a>
+    <a *ngIf="shouldShowLoginButton() && !(userLoggedIn | async)" routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page">
+        <button mat-raised-button class="login-button">Login</button>
+    </a>
+    <a *ngIf="(userLoggedIn | async)">
+        <button mat-raised-button class="logout-button" (click)="logout()">Logout</button>
     </a>
 </mat-toolbar>
 

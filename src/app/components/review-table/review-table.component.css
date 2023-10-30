@@ -1,7 +1,7 @@
 .review-container {
     display: flex;
     flex-direction: column;
-    margin: 2rem 0 0;
+    margin: 2rem 0;
     min-width: 25rem;
 }
 
@@ -30,9 +30,19 @@
   width: 10%;
 }
 
+.mat-column-delete {
+  flex: 0 0 7%;
+  width: 7%;
+}
+
 #review-card {
   margin: 0 1rem 1rem;
   font-size: 1.1rem;
+}
+
+.top-row{
+  display: flex;
+  justify-content: space-between;
 }
 
 .header-content {
@@ -48,6 +58,11 @@
   margin-left: 4rem;
 }
 
+.delete-row {
+  display: flex;
+  justify-content: end;
+}
+
 .table-review-container {
   margin: 0 3.5rem;
 }
@@ -55,4 +70,3 @@
 .card-review-container {
   margin-bottom: 2rem;
 }
-

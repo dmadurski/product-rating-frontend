@@ -1,0 +1,8 @@
+<div class="button-container">
+    <a routerLink="/reviews" routerLinkActive="active" ariaCurrentWhenActive="page" class="button-link">
+        <button mat-raised-button class="home-button" color="primary">See Reviews</button>
+    </a>
+    <a *ngIf="(isNotAdmin | async)" routerLink="/newReview" routerLinkActive="active" ariaCurrentWhenActive="page" class="button-link">
+        <button mat-raised-button class="home-button" color="accent">New Review</button>
+    </a>
+</div>
