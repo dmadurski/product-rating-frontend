@@ -7,10 +7,11 @@ export class Review {
     product: string;
     score: number;
     comment: string;
+    reviewFiles: File[];
     dateAndTime: Date | null;
 
     constructor(ratingId: string | null, userId: string | null, firstName: string, lastName: string, 
-        zipcode: number, product: string, score: number, comment: string, dateAndTime: Date | null) {
+        zipcode: number, product: string, score: number, comment: string, reviewFiles: File[], dateAndTime: Date | null) {
             this.ratingId = ratingId;
             this.userId = userId;
             this.firstName = firstName;
@@ -19,6 +20,7 @@ export class Review {
             this.product = product;
             this.score = score;
             this.comment = comment;
+            this.reviewFiles = reviewFiles;
             this.dateAndTime = dateAndTime;
     }
 }

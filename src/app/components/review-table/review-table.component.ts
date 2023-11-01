@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Review } from 'src/app/model/review';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -19,7 +19,7 @@ export class ReviewTableComponent implements OnInit {
   reviews!: Review[];
   pagedReviews!: Review[];
   dataSource: MatTableDataSource<Review>;
-  displayedColumns: string[] = ['product', 'score', 'comment', 'firstName', 'lastName', 'zipcode', 'dateAndTime'];
+  displayedColumns: string[] = ['product', 'score', 'comment', 'files', 'firstName', 'lastName', 'zipcode', 'dateAndTime'];
   shouldShowError: boolean = false;
   errorMessage?: string;
   isAdmin: boolean = false;
@@ -28,7 +28,7 @@ export class ReviewTableComponent implements OnInit {
   @ViewChild('tablePaginator') tablePaginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private router: Router, private reviewService: ReviewService, private store: Store<AppState>) {
+  constructor(private router: Router, private reviewService: ReviewService, private store: Store<AppState>, private renderer: Renderer2) {
     this.dataSource = new MatTableDataSource<Review>();
   }
   
@@ -75,12 +75,20 @@ export class ReviewTableComponent implements OnInit {
     this.cardPaginator.pageIndex = event.pageIndex;
   }
 
+  //Hides reviews with images on initial reload when deleting ANY review
   async deleteReview(ratingId: string | null) {
     console.log("RatingId: " + ratingId)
     if (ratingId) {
       try {
+
         await this.reviewService.deleteReview(ratingId);
-        await this.fetchReviews();
+        
+        this.reviews = this.reviews.filter((review) => review.ratingId !== ratingId);
+        this.pagedReviews = this.pagedReviews.filter((review) => review.ratingId !== ratingId);
+
+        this.dataSource.data = this.reviews;
+        this.cardPaginator.length = this.reviews.length;
+
       } catch (error) {
         console.error('Error:', error);
         this.shouldShowError = true;
@@ -89,4 +97,29 @@ export class ReviewTableComponent implements OnInit {
     }
   }
 
+  getFileName(file: any): string{
+    return file.originalFilename;
+  }
+
+  async downloadFile(file: any, ratingId: string){
+    try {
+      const response = await this.reviewService.fetchReviewImage(file.originalFilename, ratingId);
+      if (response.body) {
+        const blob = new Blob([response.body], { type: response.headers.get('content-type') ?? undefined});
+
+        const url = window.URL.createObjectURL(blob);
+
+        //window.open(url);
+
+        const link = this.renderer.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', file.originalFilename);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  }
 }

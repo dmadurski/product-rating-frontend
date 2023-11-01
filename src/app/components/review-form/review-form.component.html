@@ -52,12 +52,42 @@
                     </div>
                 </td>
             </tr>
+            <p>Add Screenshots (Optional)</p>
+            <tr>
+                <td>
+                    <div class="dropzone" appDragDrop (fileDropped)="onFileDropped($event)">
+                        <input type="file" accept="image/jpeg, image/jpg, image/png, application/pdf" #fileDropRef id="fileDropRef" multiple (change)="fileBrowseHandler($event)" />
+                        <img src="assets/img/ic-upload-file.svg" alt="">
+                        <h4>Drag and drop file here</h4>
+                        <h4>or</h4>
+                        <label for="fileDropRef">Browse for file</label>
+                    </div>
+
+                    <div *ngIf="shouldShowError" class="alert alert-warning" role="alert">
+                        {{errorMessage}}
+                    </div>
+                    <div class="files-list">
+                        <div class="single-file" *ngFor="let file of files; let i = index">
+                            <img src="assets/img/ic-file.svg" width="45px" alt="file">
+                            <div class="info">
+                                <h4 class="name">
+                                    {{ file?.name }}
+                                </h4>
+                                <p class="size">
+                                    {{ formatBytes(file.size) }}
+                                </p>
+                            </div>
+                            <img src="assets/img/ic-delete-file.svg" class="delete" width="20px" alt="file" (click)="deleteFile(i)">
+                        </div>
+                    </div>
+                </td>
+            </tr>
             <p>First Name</p>
             <tr>
                 <td>
                     <mat-form-field [class.readonly]="!isEditable">
                         <input matInput type="text" placeholder="First name" formControlName="firstName"
-                            [value]="form.get('firstName')?.value" (input)="setFirstName($any($event.target).value)" [readonly]="!isEditable" />
+                            [value]="form.get('firstName')?.value" (input)="setFirstName($any($event.target).value)" />
                         <mat-error *ngIf="form.get('firstName')?.hasError('required')">Name must be included</mat-error>
                         <mat-error *ngIf="form.get('firstName')?.hasError('pattern')">Name may only include alphanumeric characters & cannot start with a number</mat-error>
                     </mat-form-field>
@@ -68,7 +98,7 @@
                 <td>
                     <mat-form-field [class.readonly]="!isEditable">
                         <input matInput type="text" tabindex="-1" placeholder="Last name" formControlName="lastName" 
-                            [value]="form.get('lastName')?.value" (input)="setLastName($any($event.target).value)" [readonly]="!isEditable" />
+                            [value]="form.get('lastName')?.value" (input)="setLastName($any($event.target).value)" />
                         <mat-error *ngIf="form.get('lastName')?.hasError('required')">Name must be included</mat-error>
                         <mat-error *ngIf="form.get('lastName')?.hasError('pattern')">Name may only include alphanumeric characters & cannot start with a number</mat-error>
                     </mat-form-field>

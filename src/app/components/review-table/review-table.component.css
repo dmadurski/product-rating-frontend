@@ -25,14 +25,35 @@
   width: 8%;
 }
 
-.mat-column-zipcode {
-  flex: 0 0 10%;
-  width: 10%;
+.mat-column-files {
+  flex: 0 0 12%;
+  width: 12%;
 }
 
 .mat-column-delete {
   flex: 0 0 7%;
   width: 7%;
+}
+
+.table-file-container {
+  display: flex;
+  flex-direction: column;
+  margin: .3rem 0;
+}
+
+.text-container {
+  display: inline-block;
+  margin-right: 5px; /* Adjust as needed for spacing */
+}
+
+.table-file-container p {
+  display: flex;
+  align-items: top;
+  margin: 0;
+}
+
+.download-container {
+  display: inline-block;
 }
 
 #review-card {
@@ -69,4 +90,22 @@
 
 .card-review-container {
   margin-bottom: 2rem;
+}
+
+.file-item {
+  display: flex;
+}
+
+.file-item p {
+  margin: auto 0 0 .5rem
+}
+
+.download-link {
+  text-decoration: none;
+}
+
+.download-link:hover {
+  color: red;
+  text-decoration: underline;
+  cursor: pointer;
 }

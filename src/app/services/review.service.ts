@@ -20,6 +20,7 @@ export class ReviewService {
   private userReviewsUrl: string;
   private newReviewUrl: string;
   private deleteReviewUrl: string;
+  private fetchImageUrl: string;
 
   constructor(private http: HttpClient, private store: Store<AppState>) {
     this.userLoginUrl = 'http://localhost:8080/login'
@@ -28,6 +29,7 @@ export class ReviewService {
     this.userReviewsUrl = 'http://localhost:8080/findReviewsByOwnerId';
     this.newReviewUrl = 'http://localhost:8080/newReview';
     this.deleteReviewUrl = 'http://localhost:8080/deleteReview';
+    this.fetchImageUrl = 'http://localhost:8080/fetchImage';
   }
 
   public async userLogin(userName: string, password: string): Promise<LoginResponse> {
@@ -96,11 +98,13 @@ export class ReviewService {
     }
   }
 
-  public async newReview(review: Review): Promise<HttpResponse<Object>> {
+  public async newReview(formData: FormData): Promise<HttpResponse<Object>> {
     try {
       const jwtString = await firstValueFrom(this.store.select(selectors.selectToken).pipe(take(1)));
-      const headers = new HttpHeaders({'Authorization': jwtString});
-      const response = await firstValueFrom(this.http.post(this.newReviewUrl, review, {headers: headers, observe:'response'}));
+      const headers = new HttpHeaders({
+        'Authorization': jwtString
+      });
+      const response = await firstValueFrom(this.http.post(this.newReviewUrl, formData, {headers: headers, observe:'response'}));
       if (response.status === 200) {
         return response;
       } else {
@@ -122,6 +126,20 @@ export class ReviewService {
       } else {
         throw new Error(`HTTP status: ${response.status}, Error: ${response.body}`);
       }
+    } catch (error) {
+      console.log('Error:', error);
+      throw error;
+    }
+  }
+
+  public async fetchReviewImage(fileName: string, ratingId: string): Promise<HttpResponse<ArrayBuffer>>{
+    const params = new HttpParams()
+      .set('fileName', fileName)
+      .set('ratingId', ratingId);
+
+    try {
+      const response = await firstValueFrom(this.http.get(this.fetchImageUrl, {observe:'response', params: params, responseType: 'arraybuffer'}));
+      return response;
     } catch (error) {
       console.log('Error:', error);
       throw error;

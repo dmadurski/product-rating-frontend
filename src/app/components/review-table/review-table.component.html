@@ -14,6 +14,21 @@
         <mat-header-cell *matHeaderCellDef> Comment </mat-header-cell>
         <mat-cell *matCellDef="let review"> {{ review.comment }} </mat-cell>
       </ng-container>
+      <ng-container matColumnDef="files">
+        <mat-header-cell *matHeaderCellDef> Files </mat-header-cell>
+        <mat-cell *matCellDef="let review">
+          <div class="table-file-container">
+            <p *ngFor="let reviewFile of review.reviewFiles">
+              <span class="text-container">{{getFileName(reviewFile)}}</span>
+              <span class="download-container">
+                <a class="download-link" (click)="downloadFile(reviewFile, review.ratingId!)">
+                  <mat-icon aria-label="Download icon">download</mat-icon>
+                </a>
+              </span>
+            </p>
+          </div>
+        </mat-cell>
+      </ng-container>
       <ng-container matColumnDef="firstName">
         <mat-header-cell *matHeaderCellDef mat-sort-header> First Name </mat-header-cell>
         <mat-cell *matCellDef="let review"> {{ review.firstName }} </mat-cell>
@@ -64,7 +79,15 @@
         <li class="list-group-item">
           <span class="zipcode-span"><b>Zip:</b> {{review.zipcode}}</span>
         </li>
-        <li class="list-group-item delete-row">
+        <li class="list-group-item" *ngIf="review.reviewFiles.length > 0">
+          <div class="file-item">
+            <img src="assets/img/ic-file.svg" width="25px" alt="file">
+            <p *ngFor="let reviewFile of review.reviewFiles">{{getFileName(reviewFile)}} 
+              <a class="download-link" (click)="downloadFile(reviewFile, review.ratingId!)">(Download)</a>
+            </p>
+          </div>
+        </li>
+        <li class="list-group-item delete-row" *ngIf="isAdmin">
           <button mat-raised-button color="warn" (click)="deleteReview(review.ratingId)">
             Delete review
           </button>

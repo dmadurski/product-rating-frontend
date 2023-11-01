@@ -34,9 +34,11 @@ class AuthService {
   }
 
   async canDeactivate(component: any, next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
-    if (component.canDeactivate && component.canDeactivate()) {
+    //If the form was successfully submitted, don't ask for confirmation
+    if (component.formSuccess) {
       return true;
     }
+
     const userResponse = await this.confirmationDialogService.openConfirmationDialog();
     
     return userResponse;

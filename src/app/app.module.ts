@@ -27,6 +27,7 @@ import { StoreModule } from '@ngrx/store';
 import { reducers } from './store/index';
 import { ConfimationDialogComponent } from './components/confimation-dialog/confimation-dialog.component';
 import { ConfirmationDialogService } from './services/confirmation-dialog.service';
+import { DragDropDirective } from './directives/drag-drop.directive';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { ConfirmationDialogService } from './services/confirmation-dialog.servic
     LoginFormComponent,
     LandingPageComponent,
     ConfimationDialogComponent,
+    DragDropDirective,
   ],
   imports: [
     BrowserModule,

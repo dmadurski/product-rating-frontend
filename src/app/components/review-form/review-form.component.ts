@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -19,8 +19,11 @@ export class ReviewFormComponent {
   isEditable: boolean = true;
   characterCount: number = 0;
   formSubmitted: boolean = false;
+  formSuccess: boolean = false;
   shouldShowError: boolean = false;
   errorMessage?: string;
+  shouldShowFileError: boolean = false;
+  fileErrorMessage?: string;
   products = [
     'iConnectX',
     'EmployMe',
@@ -29,6 +32,8 @@ export class ReviewFormComponent {
   ];
   userFirstName?: string;
   userLastName?: string;
+  files: File[] = [];
+  @ViewChild("fileDropRef", { static: false }) fileDropEl!: ElementRef;
 
   constructor(private router: Router, private reviewService: ReviewService, private fb: FormBuilder, private store: Store<AppState>) {
     this.initializeForm();
@@ -58,6 +63,68 @@ export class ReviewFormComponent {
     }
   }
 
+  onFileDropped(event: any) {
+    this.prepareFilesList(event);
+  }
+
+  fileBrowseHandler(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    if (inputElement && inputElement.files) {
+      this.prepareFilesList(inputElement.files);
+    }
+  }
+
+  deleteFile(index: number) {
+    this.files.splice(index, 1);
+  }
+
+  prepareFilesList(fileList: FileList) {
+    this.shouldShowError = false;
+    const files: File[] = Array.from(fileList);
+
+    let invalidFiles = 0;
+    for (const file of files) {
+      if(this.isFileTypeAllowed(file.type)) {
+        if(this.files.length >= 2){
+          this.fileErrorMessage = "Only 2 attachments are allowed. Please remove an attached file before adding another"
+          this.shouldShowFileError = true;
+        } else if (file.size > 1000000){
+          //File size limit of 1MB
+          this.fileErrorMessage = "File cannot exceed 1MB in size"
+          this.shouldShowFileError = true;
+        } else {
+          this.files.push(file);
+        }
+      } else {
+        invalidFiles += 1;
+        console.error("Invalid file: " + file);
+      }
+    }
+
+    if (invalidFiles > 0) {
+      invalidFiles = 0;
+      this.fileErrorMessage = "Only jpg, jpeg, png, & pdf files are accepted"
+      this.shouldShowFileError = true;
+    }
+    this.fileDropEl.nativeElement.value = "";
+  }
+
+  formatBytes(bytes: number, decimals = 2) {
+    if (bytes === 0) {
+      return "0 Bytes";
+    }
+    const k = 1024;
+    const dm = decimals <= 0 ? 0 : decimals;
+    const sizes = ["Bytes", "KB", "MB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+  }
+
+  isFileTypeAllowed(fileType: string): boolean {
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+    return allowedTypes.includes(fileType);
+  }
+
   //Data binding methods
   setProduct(product: string) {
     this.form.get('product')!.setValue(product);
@@ -84,26 +151,31 @@ export class ReviewFormComponent {
     this.form.get('zipcode')!.setValue(zipcode);
   }
 
+  //instead of creating a review object, create a FormData object and populate it with all this data
   async submitReview(event: Event){
     event.preventDefault();
 
     this.formSubmitted = true;
 
-    //If all form inputs are correct, create a new review
+    //If all form inputs are correct, create a new formData object
     if (this.form.valid) {
-      const firstName = this.form.get('firstName')?.value;
-      const lastName = this.form.get('lastName')?.value;
-      const product = this.form.get('product')?.value;
-      const score = this.form.get('score')?.value;
-      const comment = this.form.get('comment')?.value;
-      const zipcode = this.form.get('zipcode')?.value;
-
+      const formData = new FormData();
       const userId = await firstValueFrom(this.store.select(selectors.selectUserId).pipe(take(1)));
 
-      const review = new Review(null, userId, firstName, lastName, zipcode, product, score, comment, null);
+      formData.append('userId', userId);
+      formData.append('firstName', this.form.get('firstName')?.value);
+      formData.append('lastName', this.form.get('lastName')?.value);
+      formData.append('zipcode', this.form.get('zipcode')?.value);
+      formData.append('product', this.form.get('product')?.value);
+      formData.append('score', this.form.get('score')?.value);
+      formData.append('comment', this.form.get('comment')?.value);
+      for (let i = 0; i < this.files.length; i++) {
+        formData.append('reviewFiles', this.files[i]);
+      }
 
       try {
-        const response = await this.reviewService.newReview(review);
+        const response = await this.reviewService.newReview(formData);
+        this.formSuccess = true;
         this.router.navigate(['/reviews']);
       } catch (error) {
         console.error('Error:', error);

@@ -1,17 +1,17 @@
 .centered-container {
-    margin-top: 1.3rem;
-    display: flex;
-    flex-direction: column; /* Stack elements vertically */
-    justify-content: center;
-    align-items: center;
+   margin-top: 1.3rem;
+   display: flex;
+   flex-direction: column; /* Stack elements vertically */
+   justify-content: center;
+   align-items: center;
 }
 
 .review-form {
-    width: 30rem;
+   width: 30rem;
 }
 
 .full-width-field {
-    width: 100%;
+   width: 100%;
  }
 
 p {
@@ -84,9 +84,119 @@ textarea {
    margin: .5rem 0 5rem;
 }
 
+.dropzone {
+   width: 22rem;
+   height: 12.5rem;
+   padding: 1rem;
+   text-align: center;
+   border: dashed 1px #979797;
+   position: relative;
+   margin: 1rem auto;
+   cursor: pointer;
+}
+
+.dropzone.file-over {
+   border: 2px dashed #007bff; /* Change the border color to indicate it's active */
+   background-color: #e6f7ff; /* Change the background color to indicate it's active */
+ }
+
+.dropzone img {
+   margin-bottom: 1rem;
+}
+ 
+.dropzone input {
+   cursor: pointer;
+   opacity: 0;
+   position: absolute;
+   z-index: 2;
+   width: 100%;
+   height: 100%;
+   top: 0;
+   left: 0;
+}
+ 
+.dropzone label {
+   color: white;
+   width: 10rem;
+   height: 2.3rem;
+   border-radius: 1.5rem;
+   background-color: #673ab7;
+   margin-top: .25rem;
+   padding: 8px 16px;
+}
+ 
+.dropzone h4 {
+   font-size: 1rem;
+   font-weight: 500;
+   color: #38424c;
+   margin-bottom: 0;
+}
+
+.files-list {
+   margin-top: 1.5rem;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+ }
+ 
+ .single-file {
+   width: 22rem;
+   display: flex;
+   padding: 0.5rem;
+   justify-content: space-between;
+   align-items: center;
+   border: dashed 1px #979797;
+   margin-bottom: 1rem;
+ }
+ 
+ .single-file img.delete {
+   margin-left: 0.5rem;
+   cursor: pointer;
+   align-self: flex-end;
+ }
+ 
+ .single-file {
+   display: flex;
+   flex-grow: 1;
+ }
+ 
+ .single-file .name {
+   font-size: 14px;
+   font-weight: 500;
+   color: #353f4a;
+   margin: 0;
+ }
+ 
+ .single-file .size {
+   font-size: 12px;
+   font-weight: 500;
+   color: #a4a4a4;
+   margin: 0;
+   margin-bottom: 0.25rem;
+ }
+ 
+ .single-file .info {
+   width: 100%;
+ }
+
+mat-form-field.readonly {
+   pointer-events: none; /* Disable hover and focus interactions */
+   background-color: transparent; /* Set the background to transparent */
+   border: none; /* Remove border */
+   box-shadow: none; /* Remove box-shadow */
+   color: inherit; /* Use the default text color */
+   cursor: default;
+}
+
+mat-dialog-actions{
+   display: flex;
+   justify-content: end;
+}
+
 @media (max-width: 575.98px) {
    .review-form {
-      width: 20rem;
+      width: 95%;
+      margin: 0 auto;
    }
     
    #end-hint {
@@ -95,19 +205,4 @@ textarea {
       transform: translateY(-1.1rem);
       position: absolute
    }
-
-}
-
-.mat-form-field.readonly {
-   pointer-events: none; /* Disable hover and focus interactions */
-   background-color: transparent; /* Set the background to transparent */
-   border: none; /* Remove border */
-   box-shadow: none; /* Remove box-shadow */
-   color: inherit; /* Use the default text color */
-   cursor: default;
- }
-
- mat-dialog-actions{
-   display: flex;
-   justify-content: end;
 }
