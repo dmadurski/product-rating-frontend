@@ -63,8 +63,8 @@
                         <label for="fileDropRef">Browse for file</label>
                     </div>
 
-                    <div *ngIf="shouldShowError" class="alert alert-warning" role="alert">
-                        {{errorMessage}}
+                    <div *ngIf="shouldShowFileError" class="alert alert-warning" role="alert">
+                        {{fileErrorMessage}}
                     </div>
                     <div class="files-list">
                         <div class="single-file" *ngFor="let file of files; let i = index">

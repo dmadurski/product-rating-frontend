@@ -1,3 +1,5 @@
+import { ImageDetails } from "./image-details";
+
 export class Review {
     ratingId: string | null;
     userId: string | null;
@@ -7,11 +9,11 @@ export class Review {
     product: string;
     score: number;
     comment: string;
-    reviewFiles: File[];
+    imageDetailsList: ImageDetails[];
     dateAndTime: Date | null;
 
     constructor(ratingId: string | null, userId: string | null, firstName: string, lastName: string, 
-        zipcode: number, product: string, score: number, comment: string, reviewFiles: File[], dateAndTime: Date | null) {
+        zipcode: number, product: string, score: number, comment: string, imageDetailsList: ImageDetails[], dateAndTime: Date | null) {
             this.ratingId = ratingId;
             this.userId = userId;
             this.firstName = firstName;
@@ -20,7 +22,7 @@ export class Review {
             this.product = product;
             this.score = score;
             this.comment = comment;
-            this.reviewFiles = reviewFiles;
+            this.imageDetailsList = imageDetailsList;
             this.dateAndTime = dateAndTime;
     }
 }

@@ -18,10 +18,10 @@
         <mat-header-cell *matHeaderCellDef> Files </mat-header-cell>
         <mat-cell *matCellDef="let review">
           <div class="table-file-container">
-            <p *ngFor="let reviewFile of review.reviewFiles">
-              <span class="text-container">{{getFileName(reviewFile)}}</span>
+            <p *ngFor="let imageDetails of review.imageDetailsList">
+              <span class="text-container">{{imageDetails.fileName}}</span>
               <span class="download-container">
-                <a class="download-link" (click)="downloadFile(reviewFile, review.ratingId!)">
+                <a class="download-link" (click)="downloadFile(imageDetails.imageId)">
                   <mat-icon aria-label="Download icon">download</mat-icon>
                 </a>
               </span>
@@ -79,11 +79,11 @@
         <li class="list-group-item">
           <span class="zipcode-span"><b>Zip:</b> {{review.zipcode}}</span>
         </li>
-        <li class="list-group-item" *ngIf="review.reviewFiles.length > 0">
+        <li class="list-group-item" *ngIf="review.imageDetailsList && review.imageDetailsList.length > 0">
           <div class="file-item">
             <img src="assets/img/ic-file.svg" width="25px" alt="file">
-            <p *ngFor="let reviewFile of review.reviewFiles">{{getFileName(reviewFile)}} 
-              <a class="download-link" (click)="downloadFile(reviewFile, review.ratingId!)">(Download)</a>
+            <p *ngFor="let imageDetails of review.imageDetailsList">{{imageDetails.fileName}} 
+              <a class="download-link" (click)="downloadFile(imageDetails.imageId)">(Download)</a>
             </p>
           </div>
         </li>

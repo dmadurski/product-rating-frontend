@@ -8,6 +8,7 @@ import { LoginResponse } from '../model/login-response';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/app-state';
 import * as selectors from 'src/app/store/store.selectors';
+import { ImageDetails } from '../model/image-details';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,7 @@ export class ReviewService {
   private userReviewsUrl: string;
   private newReviewUrl: string;
   private deleteReviewUrl: string;
+  private saveImageUrl: string;
   private fetchImageUrl: string;
 
   constructor(private http: HttpClient, private store: Store<AppState>) {
@@ -29,6 +31,7 @@ export class ReviewService {
     this.userReviewsUrl = 'http://localhost:8080/findReviewsByOwnerId';
     this.newReviewUrl = 'http://localhost:8080/newReview';
     this.deleteReviewUrl = 'http://localhost:8080/deleteReview';
+    this.saveImageUrl = 'http://localhost:8080/saveImage'
     this.fetchImageUrl = 'http://localhost:8080/fetchImage';
   }
 
@@ -116,11 +119,26 @@ export class ReviewService {
     }
   }
 
-  public async deleteReview(reviewId: string): Promise<HttpResponse<Object>> {
+  public async saveImage(formData: FormData): Promise<ImageDetails> {
     try {
       const jwtString = await firstValueFrom(this.store.select(selectors.selectToken).pipe(take(1)));
-      const headers = new HttpHeaders({'Authorization': jwtString});
-      const response = await firstValueFrom(this.http.delete(this.deleteReviewUrl, {headers: headers, body: reviewId, responseType: 'text', observe:'response'}));
+      const headers = new HttpHeaders({
+        'Authorization': jwtString
+      });
+      const imageDetails = await firstValueFrom(this.http.post<ImageDetails>(this.saveImageUrl, formData, {headers: headers}));
+      console.log(imageDetails.imageId);
+      console.log(imageDetails.fileName);
+      return imageDetails;
+    } catch (error) {
+      console.log('Error:', error);
+      throw error;
+    }
+  }
+
+  public async fetchReviewImage(imageId: string): Promise<HttpResponse<Object>>{
+    try {
+      const params = new HttpParams().set('imageId', imageId)
+      const response = await firstValueFrom(this.http.get(this.fetchImageUrl, {observe:'response', params: params}));
       if (response.status === 200) {
         return response;
       } else {
@@ -132,14 +150,16 @@ export class ReviewService {
     }
   }
 
-  public async fetchReviewImage(fileName: string, ratingId: string): Promise<HttpResponse<ArrayBuffer>>{
-    const params = new HttpParams()
-      .set('fileName', fileName)
-      .set('ratingId', ratingId);
-
+  public async deleteReview(reviewId: string): Promise<HttpResponse<Object>> {
     try {
-      const response = await firstValueFrom(this.http.get(this.fetchImageUrl, {observe:'response', params: params, responseType: 'arraybuffer'}));
-      return response;
+      const jwtString = await firstValueFrom(this.store.select(selectors.selectToken).pipe(take(1)));
+      const headers = new HttpHeaders({'Authorization': jwtString});
+      const response = await firstValueFrom(this.http.delete(this.deleteReviewUrl, {headers: headers, body: reviewId, responseType: 'text', observe:'response'}));
+      if (response.status === 200) {
+        return response;
+      } else {
+        throw new Error(`HTTP status: ${response.status}, Error: ${response.body}`);
+      }
     } catch (error) {
       console.log('Error:', error);
       throw error;

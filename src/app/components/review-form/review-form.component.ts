@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { firstValueFrom, take } from 'rxjs';
+import { ImageDetails } from 'src/app/model/image-details';
 import { Review } from 'src/app/model/review';
 import { ReviewService } from 'src/app/services/review.service';
 import { AppState } from 'src/app/store/app-state';
@@ -63,10 +64,12 @@ export class ReviewFormComponent {
     }
   }
 
+  //Handle input when a file is dropped
   onFileDropped(event: any) {
     this.prepareFilesList(event);
   }
 
+  //Handle input when a file is selected via the file browser
   fileBrowseHandler(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     if (inputElement && inputElement.files) {
@@ -79,7 +82,7 @@ export class ReviewFormComponent {
   }
 
   prepareFilesList(fileList: FileList) {
-    this.shouldShowError = false;
+    this.shouldShowFileError = false;
     const files: File[] = Array.from(fileList);
 
     let invalidFiles = 0;
@@ -91,6 +94,10 @@ export class ReviewFormComponent {
         } else if (file.size > 1000000){
           //File size limit of 1MB
           this.fileErrorMessage = "File cannot exceed 1MB in size"
+          this.shouldShowFileError = true;
+        } else if (this.files.some(existingFile => existingFile.name === file.name)) {
+          //The two files cannot chare the same name
+          this.fileErrorMessage = "File names must be unique. Please rename the current file and re-upload"
           this.shouldShowFileError = true;
         } else {
           this.files.push(file);
@@ -109,6 +116,7 @@ export class ReviewFormComponent {
     this.fileDropEl.nativeElement.value = "";
   }
 
+  //Format image size to readable text format
   formatBytes(bytes: number, decimals = 2) {
     if (bytes === 0) {
       return "0 Bytes";
@@ -151,7 +159,6 @@ export class ReviewFormComponent {
     this.form.get('zipcode')!.setValue(zipcode);
   }
 
-  //instead of creating a review object, create a FormData object and populate it with all this data
   async submitReview(event: Event){
     event.preventDefault();
 
@@ -169,9 +176,18 @@ export class ReviewFormComponent {
       formData.append('product', this.form.get('product')?.value);
       formData.append('score', this.form.get('score')?.value);
       formData.append('comment', this.form.get('comment')?.value);
+
+      //For each file uploaded, send it to the Spring API to be saved, then store the details returned to the formdata object
+      const imageDetailsList: ImageDetails[] = [];
       for (let i = 0; i < this.files.length; i++) {
-        formData.append('reviewFiles', this.files[i]);
+        const imageFormData = new FormData();
+        imageFormData.append('imageFile', this.files[i]);
+        const imageDetails: ImageDetails = await this.reviewService.saveImage(imageFormData);
+        console.log(imageDetails);
+        imageDetailsList.push(imageDetails);
       }
+      formData.append('imageDetailsList', JSON.stringify(imageDetailsList));
+      console.log(formData.get('imageDetailsList'));
 
       try {
         const response = await this.reviewService.newReview(formData);
@@ -180,7 +196,7 @@ export class ReviewFormComponent {
       } catch (error) {
         console.error('Error:', error);
         this.shouldShowError = true;
-        this.errorMessage = 'An error occurred while loading reviews. Please try again later.';
+        this.errorMessage = 'An error occurred while attempting to save the review. Please try again later.';
       }
     }
   }

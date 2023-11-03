@@ -7,7 +7,7 @@ import { ReviewService } from 'src/app/services/review.service';
 import * as selectors from 'src/app/store/store.selectors';
 import { AppState } from 'src/app/store/app-state';
 import { Store } from '@ngrx/store';
-import { firstValueFrom, take } from 'rxjs';
+import { first, firstValueFrom, take } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
@@ -75,7 +75,7 @@ export class ReviewTableComponent implements OnInit {
     this.cardPaginator.pageIndex = event.pageIndex;
   }
 
-  //Hides reviews with images on initial reload when deleting ANY review
+ 
   async deleteReview(ratingId: string | null) {
     console.log("RatingId: " + ratingId)
     if (ratingId) {
@@ -83,6 +83,7 @@ export class ReviewTableComponent implements OnInit {
 
         await this.reviewService.deleteReview(ratingId);
         
+        //Filter out the deleted review from the array of reviews
         this.reviews = this.reviews.filter((review) => review.ratingId !== ratingId);
         this.pagedReviews = this.pagedReviews.filter((review) => review.ratingId !== ratingId);
 
@@ -92,32 +93,35 @@ export class ReviewTableComponent implements OnInit {
       } catch (error) {
         console.error('Error:', error);
         this.shouldShowError = true;
-        this.errorMessage = 'An error occurred while loading reviews. Please try again later.';
+        this.errorMessage = 'An error occurred while attempting to delete review. Please try again later.';
       }
     }
   }
 
-  getFileName(file: any): string{
-    return file.originalFilename;
-  }
-
-  async downloadFile(file: any, ratingId: string){
+  async downloadFile(imageId: string){
     try {
-      const response = await this.reviewService.fetchReviewImage(file.originalFilename, ratingId);
-      if (response.body) {
-        const blob = new Blob([response.body], { type: response.headers.get('content-type') ?? undefined});
 
-        const url = window.URL.createObjectURL(blob);
+      const response = await this.reviewService.fetchReviewImage(imageId);
+      const imageInfo: any = response.body;
 
-        //window.open(url);
+      const encodedData = atob(imageInfo.content);
+      const binaryData = new Uint8Array(
+        Array.from(encodedData, (char) => char.charCodeAt(0))
+      );
+      const blob = new Blob([binaryData], { type: imageInfo.contentType });
 
-        const link = this.renderer.createElement('a');
-        link.setAttribute('href', url);
-        link.setAttribute('download', file.originalFilename);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
-      }
+      const url = window.URL.createObjectURL(blob);
+
+      // window.open(url);
+
+      const link = this.renderer.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', imageInfo.originalFilename);
+      link.click();
+      link.remove();
+      
+      window.URL.revokeObjectURL(url);
+
     } catch (error) {
       console.log('Error:', error);
     }
