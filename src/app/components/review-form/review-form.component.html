@@ -104,6 +104,17 @@
                     </mat-form-field>
                 </td>
             </tr>
+            <p>Email</p>
+            <tr>
+                <td>
+                    <mat-form-field id="email">
+                        <input matInput placeholder="Email" formControlName="email"
+                            [value]="form.get('email')?.value" (input)="setEmail($any($event.target).value)" />
+                        <mat-error *ngIf="form.get('email')?.hasError('required')">Email must be included</mat-error>
+                        <mat-error *ngIf="form.get('email')?.hasError('email')">Please provide a valid Email</mat-error>
+                    </mat-form-field>
+                </td>
+            </tr>
             <p>Zipcode</p>
             <tr>
                 <td>

@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { EmailValidator, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { NavigationExtras, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { firstValueFrom, take } from 'rxjs';
 import { ImageDetails } from 'src/app/model/image-details';
@@ -51,6 +51,7 @@ export class ReviewFormComponent {
       firstName: new FormControl(this.userFirstName, [Validators.required, Validators.pattern(/^(?![0-9])[A-Za-z0-9]*$/)]),
       lastName: new FormControl(this.userLastName, [Validators.required, Validators.pattern(/^(?![0-9])[A-Za-z0-9]*$/)]),
       zipcode: new FormControl('', [Validators.required, Validators.pattern(/^(?:\d{5}|\d{9})$/)]),
+      email: new FormControl('', [Validators.required, Validators.email]),
     });
   }
 
@@ -159,6 +160,10 @@ export class ReviewFormComponent {
     this.form.get('zipcode')!.setValue(zipcode);
   }
 
+  setEmail(email: string) {
+    this.form.get('email')!.setValue(email);
+  }
+
   async submitReview(event: Event){
     event.preventDefault();
 
@@ -174,6 +179,7 @@ export class ReviewFormComponent {
       formData.append('lastName', this.form.get('lastName')?.value);
       formData.append('zipcode', this.form.get('zipcode')?.value);
       formData.append('product', this.form.get('product')?.value);
+      formData.append('email', this.form.get('email')?.value);
       formData.append('score', this.form.get('score')?.value);
       formData.append('comment', this.form.get('comment')?.value);
 
@@ -192,7 +198,10 @@ export class ReviewFormComponent {
       try {
         const response = await this.reviewService.newReview(formData);
         this.formSuccess = true;
-        this.router.navigate(['/reviews']);
+
+        const navigationExtras: NavigationExtras = { state: { isSuccess: true } };
+        
+        this.router.navigate(['/reviews'], navigationExtras);
       } catch (error) {
         console.error('Error:', error);
         this.shouldShowError = true;

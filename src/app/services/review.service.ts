@@ -87,7 +87,7 @@ export class ReviewService {
       throw error;
     }
   }
-
+  
   public async findReviewsByOwner(ownerId: string): Promise<Review[]> {
     try {
       const jwtString = await firstValueFrom(this.store.select(selectors.selectToken).pipe(take(1)));

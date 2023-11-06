@@ -16,6 +16,7 @@ export class NavComponent {
   constructor(private router: Router, private store: Store<AppState>) {}
 
   userLoggedIn = this.store.select(selectors.selectLoginStatus);
+  userFirstName = this.store.select(selectors.selectFirstName);
   isNotAdmin = this.store.select(selectors.selectRole).pipe(
     map((userRole) => userRole !== 'ADMIN')
   );

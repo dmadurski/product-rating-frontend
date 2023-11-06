@@ -1,6 +1,11 @@
+<div *ngIf="shouldShowSuccess" class="success-message">
+  <div  class="alert alert-success success-alert" role="alert">
+    Success! Your review has been submitted.
+  </div>
+</div>
 <div class="review-container">
   <div class="d-none d-lg-block mat-elevation-z5 table-review-container">
-    <mat-table #table [dataSource]="dataSource" matSort>
+    <mat-table #table [dataSource]="dataSource" matSort matSortActive="dateAndTime" matSortDirection="desc">
       <!-- Define the columns -->
       <ng-container matColumnDef="product">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Product </mat-header-cell>
@@ -29,11 +34,11 @@
           </div>
         </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="firstName">
+      <ng-container matColumnDef="firstName" *ngIf="isAdmin">
         <mat-header-cell *matHeaderCellDef mat-sort-header> First Name </mat-header-cell>
         <mat-cell *matCellDef="let review"> {{ review.firstName }} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="lastName">
+      <ng-container matColumnDef="lastName" *ngIf="isAdmin">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </mat-header-cell>
         <mat-cell *matCellDef="let review"> {{ review.lastName }} </mat-cell>
       </ng-container>

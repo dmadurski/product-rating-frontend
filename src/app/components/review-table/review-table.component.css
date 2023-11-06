@@ -1,8 +1,8 @@
 .review-container {
     display: flex;
     flex-direction: column;
-    margin: 2rem 0;
     min-width: 25rem;
+    margin: 2rem 0;
 }
 
 @media (min-width: 1200px) {
@@ -11,28 +11,54 @@
   } 
 }
 
+.success-message {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0 0;
+}
+
+.success-alert {
+  margin: 0;
+}
+
 .mat-table {
   overflow: auto;
 }
 
-.mat-column-product {
-  flex: 0 0 14%;
-  width: 14%;
+.mat-column-comment {
+  flex: 1 0 10%;
+}
+
+.mat-column-firstName {
+  flex: 1.5 0 7%;
+}
+
+.mat-column-lastName {
+  flex: 1.5 0 7%;
 }
 
 .mat-column-score {
-  flex: 0 0 8%;
-  width: 8%;
+  flex: 0 0 6%;
+}
+
+.mat-column-product {
+  flex: 0 0 14%;
+}
+
+.mat-column-zipcode {
+  flex: .5 2 8%;
 }
 
 .mat-column-files {
+  flex: 1 0 12%;
+}
+
+.mat-column-dateAndTime {
   flex: 0 0 12%;
-  width: 12%;
 }
 
 .mat-column-delete {
   flex: 0 0 7%;
-  width: 7%;
 }
 
 .table-file-container {
@@ -41,19 +67,11 @@
   margin: .3rem 0;
 }
 
-.text-container {
-  display: inline-block;
-  margin-right: 5px; /* Adjust as needed for spacing */
-}
-
 .table-file-container p {
   display: flex;
+  flex-wrap: wrap;
   align-items: top;
   margin: 0;
-}
-
-.download-container {
-  display: inline-block;
 }
 
 #review-card {

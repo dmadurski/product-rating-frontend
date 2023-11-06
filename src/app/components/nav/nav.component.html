@@ -17,6 +17,7 @@
     <a *ngIf="(userLoggedIn | async)">
         <button mat-raised-button class="logout-button" (click)="logout()">Logout</button>
     </a>
+    <span class="welcome-test d-none d-lg-block" *ngIf="(userLoggedIn | async)">Welcome, {{userFirstName | async}}!</span>
 </mat-toolbar>
 
 

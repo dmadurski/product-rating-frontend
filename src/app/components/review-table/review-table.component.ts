@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Review } from 'src/app/model/review';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -8,7 +8,7 @@ import * as selectors from 'src/app/store/store.selectors';
 import { AppState } from 'src/app/store/app-state';
 import { Store } from '@ngrx/store';
 import { first, firstValueFrom, take } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-review-table',
@@ -17,10 +17,12 @@ import { Router } from '@angular/router';
 })
 export class ReviewTableComponent implements OnInit {
   reviews!: Review[];
+  sortedReviews!: Review[];
   pagedReviews!: Review[];
   dataSource: MatTableDataSource<Review>;
-  displayedColumns: string[] = ['product', 'score', 'comment', 'files', 'firstName', 'lastName', 'zipcode', 'dateAndTime'];
+  displayedColumns: string[] = ['product', 'score', 'comment', 'files', 'zipcode', 'dateAndTime'];
   shouldShowError: boolean = false;
+  shouldShowSuccess: boolean = false;
   errorMessage?: string;
   isAdmin: boolean = false;
 
@@ -30,6 +32,20 @@ export class ReviewTableComponent implements OnInit {
 
   constructor(private router: Router, private reviewService: ReviewService, private store: Store<AppState>, private renderer: Renderer2) {
     this.dataSource = new MatTableDataSource<Review>();
+
+    
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras.state as { isSuccess: boolean };
+
+    //Check if user was naviagated here as a result of a successful review submission
+    //If so, show the success alert for 10 seconds
+    if (state !== undefined && state.isSuccess === true) {
+      console.log("Success found in state!");
+      this.shouldShowSuccess = true;
+      setTimeout(() => {
+        this.shouldShowSuccess = false;
+      }, 5000);
+    }
   }
   
   async ngOnInit(){
@@ -37,7 +53,9 @@ export class ReviewTableComponent implements OnInit {
     const role = await firstValueFrom(this.store.select(selectors.selectRole).pipe(take(1)));
     if (role == "ADMIN") {
       this.isAdmin = true;
-      this.displayedColumns.push("delete");
+      this.displayedColumns.splice(4, 0, "firstName");
+      this.displayedColumns.splice(5, 0, "lastName");
+      this.displayedColumns.push("delete")
     }
 
     this.fetchReviews();
@@ -48,9 +66,11 @@ export class ReviewTableComponent implements OnInit {
     try {
       if(this.isAdmin) {
         this.reviews = await this.reviewService.findAll();
+        this.sortedReviews = this.reviews.sort((a, b) => new Date(b.dateAndTime!).getTime() - new Date(a.dateAndTime!).getTime());
       } else {
         const ownerId = await firstValueFrom(this.store.select(selectors.selectUserId).pipe(take(1)));
         this.reviews = await this.reviewService.findReviewsByOwner(ownerId);
+        this.sortedReviews = this.reviews.sort((a, b) => new Date(b.dateAndTime!).getTime() - new Date(a.dateAndTime!).getTime());
       }
       
       console.log(this.reviews);
@@ -58,8 +78,8 @@ export class ReviewTableComponent implements OnInit {
       this.dataSource.paginator = this.tablePaginator;
       this.dataSource.sort = this.sort;
       
-      this.cardPaginator.length = this.reviews.length;
-      this.pagedReviews = this.reviews.slice(0, this.cardPaginator.pageSize);
+      this.cardPaginator.length = this.sortedReviews.length;
+      this.pagedReviews = this.sortedReviews.slice(0, this.cardPaginator.pageSize);
     } catch (error) {
       console.error('Error:', error);
       this.shouldShowError = true;
@@ -71,7 +91,7 @@ export class ReviewTableComponent implements OnInit {
   onPageChange(event: PageEvent) {
     const startIndex = event.pageIndex * event.pageSize;
     const endIndex = startIndex + event.pageSize;
-    this.pagedReviews = this.reviews.slice(startIndex, endIndex);
+    this.pagedReviews = this.sortedReviews.slice(startIndex, endIndex);
     this.cardPaginator.pageIndex = event.pageIndex;
   }
 
@@ -88,7 +108,7 @@ export class ReviewTableComponent implements OnInit {
         this.pagedReviews = this.pagedReviews.filter((review) => review.ratingId !== ratingId);
 
         this.dataSource.data = this.reviews;
-        this.cardPaginator.length = this.reviews.length;
+        this.cardPaginator.length = this.sortedReviews.length;
 
       } catch (error) {
         console.error('Error:', error);
