@@ -48,7 +48,7 @@ export class LoginFormComponent {
 
       try {
         const loginResponse: LoginResponse = (await this.reviewService.userLogin(userName, hashedPassword));
-        this.dispatchActions(loginResponse.firstName, loginResponse.lastName, loginResponse.userId, loginResponse.token, loginResponse.role)
+        this.dispatchActions(loginResponse.firstName, loginResponse.lastName, loginResponse.userId, loginResponse.token, loginResponse.role);
         this.router.navigate(['/home']);
       } catch (error) {
         console.error('Error:', error);

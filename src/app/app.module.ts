@@ -28,6 +28,7 @@ import { reducers } from './store/index';
 import { ConfimationDialogComponent } from './components/confimation-dialog/confimation-dialog.component';
 import { ConfirmationDialogService } from './services/confirmation-dialog.service';
 import { DragDropDirective } from './directives/drag-drop.directive';
+import { ContinueSessionDialogComponent } from './components/continue-session-dialog/continue-session-dialog.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { DragDropDirective } from './directives/drag-drop.directive';
     LandingPageComponent,
     ConfimationDialogComponent,
     DragDropDirective,
+    ContinueSessionDialogComponent,
   ],
   imports: [
     BrowserModule,
