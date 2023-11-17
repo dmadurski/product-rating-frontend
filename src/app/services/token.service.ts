@@ -22,8 +22,6 @@ export class TokenService {
   }
 
   public async verifyToken() {
-    console.log("Reached verifyToken method")
-    console.log(await firstValueFrom(this.store.select(selectors.selectToken).pipe(take(1))));
     try {
       const jwtString: string = await firstValueFrom(this.store.select(selectors.selectToken).pipe(take(1)));
 
@@ -37,17 +35,15 @@ export class TokenService {
           const responseMessage: String = response.body;
           console.log(responseMessage);
           if(responseMessage === "JWT recently expired"){
-            console.log("JWT recently expired");
             this.confirmContinueSession();
           } else if (responseMessage === "JWT expired for too long") {
-            console.log("JWT expired");
             this.logout();
           }
         }
       } 
     } catch (error) {
       console.log('Error:', error);
-      throw error;
+      this.logout();
     }
   }
 

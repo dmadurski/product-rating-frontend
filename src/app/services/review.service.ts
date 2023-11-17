@@ -126,8 +126,6 @@ export class ReviewService {
         'Authorization': jwtString
       });
       const imageDetails = await firstValueFrom(this.http.post<ImageDetails>(this.saveImageUrl, formData, {headers: headers}));
-      console.log(imageDetails.imageId);
-      console.log(imageDetails.fileName);
       return imageDetails;
     } catch (error) {
       console.log('Error:', error);

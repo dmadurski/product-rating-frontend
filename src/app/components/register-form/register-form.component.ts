@@ -53,13 +53,9 @@ export class RegisterFormComponent {
       const lastName = this.form.get('lastName')?.value;
       const userName = this.form.get('userName')?.value;
       const password = this.form.get('password')?.value.toString();
-      console.log("Password during reg: " + password);
       const hashedPassword = SHA256(password).toString();
-      console.log("Hashed password during reg: " + hashedPassword);
 
       const user = new User(firstName, lastName, userName, hashedPassword, "USER");
-
-      console.log(user);
 
       //We expect a response similar to a successful login: necessary user info that we store locally
       try {
@@ -72,7 +68,7 @@ export class RegisterFormComponent {
         if(error.status === 409) {
           this.errorMessage = "That username is already in use, please choose another one.";
         } else {
-          this.errorMessage = 'An error occurred while loading reviews. Please try again later.';
+          this.errorMessage = 'An error occurred while registering. Pleas try again later.';
         }
         //Scroll the page to the top to show the error message
         window.scroll({ top: 0, });

@@ -189,11 +189,9 @@ export class ReviewFormComponent {
         const imageFormData = new FormData();
         imageFormData.append('imageFile', this.files[i]);
         const imageDetails: ImageDetails = await this.reviewService.saveImage(imageFormData);
-        console.log(imageDetails);
         imageDetailsList.push(imageDetails);
       }
       formData.append('imageDetailsList', JSON.stringify(imageDetailsList));
-      console.log(formData.get('imageDetailsList'));
 
       try {
         const response = await this.reviewService.newReview(formData);

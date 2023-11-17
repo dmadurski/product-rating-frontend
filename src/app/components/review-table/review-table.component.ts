@@ -40,7 +40,6 @@ export class ReviewTableComponent implements OnInit {
     //Check if user was naviagated here as a result of a successful review submission
     //If so, show the success alert for 10 seconds
     if (state !== undefined && state.isSuccess === true) {
-      console.log("Success found in state!");
       this.shouldShowSuccess = true;
       setTimeout(() => {
         this.shouldShowSuccess = false;
@@ -97,7 +96,6 @@ export class ReviewTableComponent implements OnInit {
 
  
   async deleteReview(ratingId: string | null) {
-    console.log("RatingId: " + ratingId)
     if (ratingId) {
       try {
 

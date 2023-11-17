@@ -34,7 +34,7 @@ export class AppComponent implements OnInit{
   }
   
   async ngOnInit(): Promise<void> {
-        //If there is a state saved in local storage, restore the values.
+    //If there is a state saved in local storage, restore the values.
     const savedState = localStorage.getItem('state');
 
     if (savedState) {
@@ -50,7 +50,6 @@ export class AppComponent implements OnInit{
       localStorage.clear();
     }
 
-    console.log("Setting the service to repeat");
     //Automatically check the status of the stored JWT token every 5 minutes
     setInterval(this.tokenService.verifyToken.bind(this.tokenService), 300000);
   }
